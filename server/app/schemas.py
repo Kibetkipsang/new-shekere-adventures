@@ -7,6 +7,9 @@ class UserBasicSchema(ma.SQLAlchemySchema):
     id = ma.auto_field()
     full_name = ma.auto_field()
 
+user_schema = UserBasicSchema()
+users_schema = UserBasicSchema(many=True)
+
 class CommunityTripSchema(ma.SQLAlchemySchema):
     class Meta:
         model = CommunityTrip

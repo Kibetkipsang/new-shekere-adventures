@@ -6,6 +6,7 @@ from flask_jwt_extended import JWTManager
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 from dotenv import load_dotenv
+from flask_cors import CORS
 import os
 
 socketio = SocketIO(cors_allowed_origins="*")
@@ -28,6 +29,8 @@ def create_app():
     migrate.init_app(app, db)
     ma.init_app(app)
 
+    CORS(app, supports_credentials=True)
+    
     from .routes.auth_routes import auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
     from .routes.destination_routes import destination_bp
@@ -38,6 +41,12 @@ def create_app():
     app.register_blueprint(community_trip_bp)
     from .routes.welcome_routes import welcome_bp
     app.register_blueprint(welcome_bp)
+    from .routes.user_routes import user_bp
+    app.register_blueprint(user_bp)
+    from .routes.admin_routes import admin_bp
+    app.register_blueprint(admin_bp)
+
+
 
     socketio.init_app(app)
     return app

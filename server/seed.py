@@ -11,6 +11,10 @@ app.app_context().push()
 db.drop_all()
 db.create_all()
 
+admin_user = User(full_name='admin', email='admin@shekere.com',password=generate_password_hash('Admin123!'), role='admin') 
+db.session.add(admin_user)
+db.session.commit()
+
 # Sample users 
 dennis = User(
     full_name="dennis kibet",
