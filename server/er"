@@ -1,0 +1,15 @@
+                 List of relations
+ Schema |       Name        | Type  |    Owner     
+--------+-------------------+-------+--------------
+ public | alembic_version   | table | shekere_user
+ public | bookings          | table | shekere_user
+ public | community_trip    | table | shekere_user
+ public | destinations      | table | shekere_user
+ public | reviews           | table | shekere_user
+ public | tour_packages     | table | shekere_user
+ public | trip_messages     | table | shekere_user
+ public | trip_participants | table | shekere_user
+ public | user              | table | shekere_user
+ public | users             | table | shekere_user
+(10 rows)
+

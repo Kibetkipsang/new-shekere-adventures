@@ -5,7 +5,9 @@ class UserBasicSchema(ma.SQLAlchemySchema):
     class Meta:
         model = User
     id = ma.auto_field()
-    full_name = ma.auto_field()
+    first_name = ma.auto_field() 
+    middle_name = ma.auto_field()
+    last_name = ma.auto_field()
 
 user_schema = UserBasicSchema()
 users_schema = UserBasicSchema(many=True)

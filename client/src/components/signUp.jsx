@@ -14,15 +14,18 @@ export default function SignUp(){
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false)
     
     const handleSignup = async () => {
         if (password !== confirmPassword) {
         alert("Passwords do not match!");
         return;
         }
+
+        setLoading(true);
         
         try{
-            const res = await axios.post("/register", {
+            const res = await axios.post("/auth/register", {
                 firstName,
                 middleName,
                 lastName,
@@ -31,9 +34,12 @@ export default function SignUp(){
                 password
             });
             localStorage.setItem("token", res.data.access_token);
-            navigate("/users");
+            navigate("/login");
         } catch(error){
             alert("Signup Failed:" + (error.response?.data?.msg || error.message))
+        }
+        finally {
+            setLoading(false);
         }
     };
     console.log("SignUp loaded")
@@ -117,8 +123,9 @@ export default function SignUp(){
                 {showConfirmPassword ? "Hide" : "Show"}
                 </button>
                 </div>
-                <div className="mt-4 px-16 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-center mb-2">
-                <button onClick={handleSignup}>Sign Up</button>
+                <div onClick={handleSignup} disabled={loading}
+                className="mt-4 px-16 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-center mb-2">
+                <button>{loading? "Signing up!" : "Sign Up"}</button>
                 </div>
                 <p className="text-sm font-normal text-gray-600">Already have an account? {" "} <Link to="/login" className="text-blue-600 hover:underline">Sign In</Link></p>
                 </div>       
