@@ -2,11 +2,6 @@ from . import db
 from datetime import datetime
 
 # Association table for many-to-many relationship between User and CommunityTrip
-trip_participants = db.Table(
-    'trip_participants',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('trip_id', db.Integer, db.ForeignKey('community_trip.id'))
-)
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -27,10 +22,14 @@ class User(db.Model):
     reviews = db.relationship('Review', back_populates='reviewed_by', lazy=True)
     created_trips = db.relationship('CommunityTrip', back_populates='creator', lazy=True)
     sent_trip_messages = db.relationship('TripMessage', back_populates='user', lazy=True)
+
+    # New relationships using TripParticipant model
+    trip_participations = db.relationship('TripParticipant', back_populates='user', cascade='all, delete-orphan')
     community_trips_joined = db.relationship(
         'CommunityTrip',
-        secondary=trip_participants,
-        back_populates='participants'
+        secondary='trip_participants',
+        viewonly=True,
+        back_populates='members'
     )
 
 
@@ -117,13 +116,16 @@ class CommunityTrip(db.Model):
 
     # Relationships
     creator = db.relationship('User', back_populates='created_trips')
-    participants = db.relationship(
-        'User',
-        secondary=trip_participants,
-        back_populates='community_trips_joined'
-    )
     messages = db.relationship('TripMessage', back_populates='trip', lazy=True)
 
+    # New relationships using TripParticipant model
+    participant_links = db.relationship('TripParticipant', back_populates='trip', cascade='all, delete-orphan')
+    members = db.relationship(
+        'User',
+        secondary='trip_participants',
+        viewonly=True,
+        back_populates='community_trips_joined'
+    )
 
 class TripMessage(db.Model):
     __tablename__ = 'trip_messages'
@@ -138,3 +140,13 @@ class TripMessage(db.Model):
     # Relationships
     user = db.relationship('User', back_populates='sent_trip_messages')
     trip = db.relationship('CommunityTrip', back_populates='messages')
+
+class TripParticipant(db.Model):
+    __tablename__ = 'trip_participants'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    trip_id = db.Column(db.Integer, db.ForeignKey('community_trip.id'), primary_key=True)
+    role = db.Column(db.String(50), default='member')  # member/admin/creator
+
+    user = db.relationship('User', back_populates='trip_participations')
+    trip = db.relationship('CommunityTrip', back_populates='participant_links')

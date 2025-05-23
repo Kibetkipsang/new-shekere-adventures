@@ -13,16 +13,16 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="bg-white shadow-md p-4 h-20">
+    <nav className="bg-black shadow-md p-4 h-20">
       <div className="container mx-auto flex items-center justify-between">
-        <h3 className="text-xl font-medium text-gray-800">Shekere Adventures</h3>
+        <h3 className="text-xl font-medium text-white">Shekere Adventures</h3>
 
         <div className="flex space-x-4 ml-auto">
           {!isLoggedIn && (
-            <>
+            <div className="text-white space-x-2">
               <Link to="/login" className="hover:underline">Login</Link>
               <Link to="/signUp" className="hover:underline">Sign Up</Link>
-            </>
+            </div>
           )}
 
           {isLoggedIn && (
