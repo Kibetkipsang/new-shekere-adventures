@@ -24,7 +24,7 @@ export default function UserDashboard() {
         const { data: userData } = await axios.get("/auth/profile");
         setUser(userData);
 
-        const { data: groupsData } = await axios.get("/groups/my-groups");
+        const { data: groupsData } = await axios.get("/joined-community-trips");
         setGroups(groupsData);
 
         const { data: messagesData } = await axios.get("/groups/recent-messages");
@@ -80,19 +80,19 @@ export default function UserDashboard() {
 
         {/* Stats Row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 mb-6">
-          <div className="bg-yellow-100 text-black rounded-lg p-4 text-center shadow">
+          <div className="bg-yellow-400 text-black rounded-lg p-4 text-center shadow">
             <p className="text-3xl font-bold">{plans.length}</p>
             <p className="text-sm">Trips Booked</p>
           </div>
-          <div className="bg-yellow-100 text-black rounded-lg p-4 text-center shadow">
+          <div className="bg-yellow-400 text-black rounded-lg p-4 text-center shadow">
             <p className="text-3xl font-bold">{groups.length}</p>
             <p className="text-sm">Groups Joined</p>
           </div>
-          <div className="bg-yellow-100 text-black rounded-lg p-4 text-center shadow">
+          <div className="bg-yellow-400 text-black rounded-lg p-4 text-center shadow">
             <p className="text-3xl font-bold">{messages.length}</p>
             <p className="text-sm">Messages</p>
           </div>
-          <div className="bg-yellow-100 text-black rounded-lg p-4 text-center shadow">
+          <div className="bg-yellow-400 text-black rounded-lg p-4 text-center shadow">
             <p className="text-3xl font-bold">1</p>
             <p className="text-sm">Reviews Given</p>
           </div>

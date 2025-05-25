@@ -65,5 +65,8 @@ def create_app():
     from .routes.admin_routes import admin_bp
     app.register_blueprint(admin_bp)
 
+    from .routes.poll_routes import poll_bp
+    app.register_blueprint(poll_bp)
+
     socketio.init_app(app)
     return app

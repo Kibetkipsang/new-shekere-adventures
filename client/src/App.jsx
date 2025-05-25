@@ -8,6 +8,8 @@ import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoutes';
 import UserDashboard from './pages/UserDashboard';
 import CreateAdventure from './pages/CreateAdventure';
+import GroupDetails from './pages/GroupDetails';
+
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/signUp' element={<SignUp />}/>
         <Route path="/create-adventure" element={<CreateAdventure />} />
+        <Route path="/community-trips/:groupId" element={<GroupDetails/>}/>
         <Route path='UserDashboard' element={
           <ProtectedRoute>
             <UserDashboard />

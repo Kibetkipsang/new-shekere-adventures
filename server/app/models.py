@@ -1,7 +1,13 @@
 from . import db
 from datetime import datetime
+from enum import Enum
 
-# Association table for many-to-many relationship between User and CommunityTrip
+class TripRole(str, Enum):
+    CREATOR = "creator"
+    ADMIN = "admin"
+    MEMBER = "member"
+
+
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -146,7 +152,52 @@ class TripParticipant(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey('community_trip.id'), primary_key=True)
-    role = db.Column(db.String(50), default='member')  # member/admin/creator
+    role = db.Column(db.Enum(TripRole, name="triprole"), default=TripRole.MEMBER, nullable=False)
+
 
     user = db.relationship('User', back_populates='trip_participations')
     trip = db.relationship('CommunityTrip', back_populates='participant_links')
+
+class Plan(db.Model):
+    __tablename__ = 'plans'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), nullable=False)
+    time = db.Column(db.String(50), nullable=False)
+    location = db.Column(db.String(120), nullable=False)
+    trip_id = db.Column(db.Integer, db.ForeignKey('community_trip.id'), nullable=False)
+
+    # Relationships
+    trip = db.relationship('CommunityTrip', backref='plans')
+
+class Poll(db.Model):
+    __tablename__ = 'polls'
+
+    id = db.Column(db.Integer, primary_key=True)
+    community_trip_id = db.Column(db.Integer, db.ForeignKey("community_trip.id"))
+    question = db.Column(db.String(255), nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    options = db.relationship("PollOption", backref="poll", cascade="all, delete")
+    votes = db.relationship("Vote", backref="poll", cascade="all, delete")
+
+
+class PollOption(db.Model):
+    __tablename__ = 'poll_options'
+
+    id = db.Column(db.Integer, primary_key=True)
+    poll_id = db.Column(db.Integer, db.ForeignKey("polls.id"))
+    name = db.Column(db.String(100), nullable=False)
+    votes = db.relationship("Vote", backref="option", cascade="all, delete")
+
+
+class Vote(db.Model):
+    __tablename__ = 'votes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    poll_id = db.Column(db.Integer, db.ForeignKey("polls.id"))
+    poll_option_id = db.Column(db.Integer, db.ForeignKey("poll_options.id"))
+
+
+    __table_args__ = (db.UniqueConstraint('user_id', 'poll_id', name='_user_poll_vote_uc'),)

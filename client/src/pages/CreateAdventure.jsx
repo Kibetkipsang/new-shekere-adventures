@@ -104,7 +104,6 @@ export default function CreateAdventure(){
                 placeholder="Image Url (optional)"
                 value={formData.image_url}
                 onChange={handleChange}
-                required
                 className="w-full mb-2 p-3 border rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 />
                 <button 
